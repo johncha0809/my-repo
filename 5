@@ -1,0 +1,113 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled1.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyPTHrbPnN+AZQnAJAlsfS9D",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/johncha0809/my-repo/blob/master/5\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ZH1VzNbK8K-_",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 478
+        },
+        "outputId": "9628a769-4529-49b2-d9d1-6f803443a06f"
+      },
+      "source": [
+        "import tensorflow as tf\n",
+        "import numpy as np\n",
+        "tf.set_random_seed(777)\n",
+        "\n",
+        "data-01-test-score.scv\n",
+        "#\n",
+        "xy = np.loadtxt('data-01-test-score.csv', delimiter=',',dtype=np.float32)\n",
+        "x_data = xy[:, 0:-1]\n",
+        "y_data = xy[:, [-1]]\n",
+        "\n",
+        "print(x_data.shape, x_data, len(x_data))\n",
+        "print(y_data.shape, y_data)\n",
+        "\n",
+        "X = tf.placeholder(tf.float32, shape=[None, 3])\n",
+        "Y = tf.placeholder(tf.float32, shape=[None, 1])\n",
+        "\n",
+        "W = tf.Variable(tf.random_normal([3, 1]), name='weight')\n",
+        "b = tf.Variable(tf.random_normal([1]), name='bias')\n",
+        "\n",
+        "hypothesis = tf.matmul(X, W) + b\n",
+        "\n",
+        "cost = tf.reduce_mean(tf.square(hypothesis - Y))\n",
+        "\n",
+        "optimizer = tf.train.GradientDescentOptimizer(leaning_rate=1e-5)\n",
+        "train = optimizer.minimize(cost)\n",
+        "\n",
+        "sess = tf.Session()\n",
+        "sess.run(tf.global_variables_initializer())\n",
+        "\n",
+        "for step in range(2001):\n",
+        "  cost_val, hy_val, _ = sess.run([cost,hypothesis, train],feed_dict={X: x_data, Y: y_data})\n",
+        "  if step % 10 ==0:\n",
+        "    print(step, \"Cost: \", cost_val, \"\\nPrediction:\\n\", hy_val)\n",
+        "\n",
+        "print(\"Your score will be\" , sess.run(hypothesis, feed_dict={X: [[100,70,101]]}))\n",
+        "print(\"Other score will be\" , sess.run(hypothesis, feed_dict={X: [[60,70,110],[90,100,80]]}))"
+      ],
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<p style=\"color: red;\">\n",
+              "The default version of TensorFlow in Colab will soon switch to TensorFlow 2.x.<br>\n",
+              "We recommend you <a href=\"https://www.tensorflow.org/guide/migrate\" target=\"_blank\">upgrade</a> now \n",
+              "or ensure your notebook will continue to use TensorFlow 1.x via the <code>%tensorflow_version 1.x</code> magic:\n",
+              "<a href=\"https://colab.research.google.com/notebooks/tensorflow_version.ipynb\" target=\"_blank\">more info</a>.</p>\n"
+            ],
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          }
+        },
+        {
+          "output_type": "error",
+          "ename": "OSError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mOSError\u001b[0m                                   Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-2-2aff2d0fab29>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0mtf\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mset_random_seed\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m777\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 5\u001b[0;31m \u001b[0mxy\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mloadtxt\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'data-01-test-score.csv'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdelimiter\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m','\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mdtype\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfloat32\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      6\u001b[0m \u001b[0mx_data\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mxy\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      7\u001b[0m \u001b[0my_data\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mxy\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/numpy/lib/npyio.py\u001b[0m in \u001b[0;36mloadtxt\u001b[0;34m(fname, dtype, comments, delimiter, converters, skiprows, usecols, unpack, ndmin, encoding, max_rows)\u001b[0m\n\u001b[1;32m    966\u001b[0m             \u001b[0mfname\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mos_fspath\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfname\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    967\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0m_is_string_like\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfname\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 968\u001b[0;31m             \u001b[0mfh\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlib\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_datasource\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mopen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfname\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'rt'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mencoding\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mencoding\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    969\u001b[0m             \u001b[0mfencoding\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mgetattr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfh\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'encoding'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'latin1'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    970\u001b[0m             \u001b[0mfh\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0miter\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfh\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/numpy/lib/_datasource.py\u001b[0m in \u001b[0;36mopen\u001b[0;34m(path, mode, destpath, encoding, newline)\u001b[0m\n\u001b[1;32m    267\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    268\u001b[0m     \u001b[0mds\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mDataSource\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdestpath\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 269\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0mds\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mopen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mpath\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mmode\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mencoding\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mencoding\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mnewline\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mnewline\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    270\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    271\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/numpy/lib/_datasource.py\u001b[0m in \u001b[0;36mopen\u001b[0;34m(self, path, mode, encoding, newline)\u001b[0m\n\u001b[1;32m    621\u001b[0m                                       encoding=encoding, newline=newline)\n\u001b[1;32m    622\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 623\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mIOError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"%s not found.\"\u001b[0m \u001b[0;34m%\u001b[0m \u001b[0mpath\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    624\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    625\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mOSError\u001b[0m: data-01-test-score.csv not found."
+          ]
+        }
+      ]
+    }
+  ]
+}
